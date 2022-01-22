@@ -1,1 +1,0 @@
-package weedro.reciper.domain

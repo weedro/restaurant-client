@@ -4,9 +4,9 @@ import io.micronaut.core.annotation.Introspected
 import org.bson.types.ObjectId
 
 @Introspected
-data class Ingredient(var name: String, var quantity: UInt) {
+data class Ingredient(var name: String, var quantity: Int) {
     // empty constructor for jackson
-    constructor() : this("", 1U)
+    constructor() : this("", 1)
 }
 
 @Introspected

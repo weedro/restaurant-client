@@ -30,6 +30,7 @@ interface RecipeRepository {
             recipe.id = ObjectId(recipe.hash.substring(0..23))
             return Mono.from(getCollection().insertOne(recipe))
                 .map { true }
+                .log("save recipe: $recipe")
                 .onErrorReturn(false)
         }
 
