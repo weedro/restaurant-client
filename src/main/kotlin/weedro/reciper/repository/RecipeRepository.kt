@@ -17,26 +17,25 @@ interface RecipeRepository {
     fun save(recipe: Recipe): Mono<Boolean>
 
     @Singleton
-    class Base(private val mongoConfig: MongoConfig, private val mongoClient: MongoClient) :
-        RecipeRepository {
+    class Base(
+        private val mongoConfig: MongoConfig, private val mongoClient: MongoClient
+    ) : RecipeRepository {
 
         override fun random(): Mono<Recipe> =
-            getCollection()
-                .aggregate(listOf(Aggregates.sample(1)))
-                .toMono()
+            getCollection().aggregate(listOf(Aggregates.sample(1)))
+                    .toMono()
 
-        // todo unique hash
         override fun save(recipe: Recipe): Mono<Boolean> {
-            recipe.id = ObjectId(recipe.hash.substring(0..23))
+            recipe.id = ObjectId(recipe.hash.substring(0 .. 23))
             return Mono.from(getCollection().insertOne(recipe))
-                .map { true }
-                .log("save recipe: $recipe")
-                .onErrorReturn(false)
+                    .map { true }
+                    .log("save recipe: $recipe")
+                    .onErrorReturn(false)
         }
 
         private fun getCollection(): MongoCollection<Recipe> {
             return mongoClient.getDatabase(mongoConfig.collection)
-                .getCollection(mongoConfig.collection, Recipe::class.java)
+                    .getCollection(mongoConfig.collection, Recipe::class.java)
         }
 
     }

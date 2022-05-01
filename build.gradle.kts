@@ -47,7 +47,7 @@ dependencies {
 
 
 application {
-    mainClass.set("weedro.reciper.ApplicationKt")
+    mainClass.set("weedro.reciper.RestaurantClientKt")
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("11")

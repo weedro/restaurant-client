@@ -5,6 +5,7 @@ import org.bson.types.ObjectId
 
 @Introspected
 data class Ingredient(var name: String, var quantity: Int) {
+
     // empty constructor for jackson
     constructor() : this("", 1)
 }
@@ -18,5 +19,6 @@ data class Recipe(
     var icon: Int,
     var ingredients: List<Ingredient>
 ) {
+
     constructor() : this(null, "", "", "", 0, emptyList())
 }

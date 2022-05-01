@@ -11,6 +11,7 @@ import reactor.kotlin.core.publisher.toFlux
 import weedro.reciper.domain.Recipe
 import weedro.reciper.repository.RecipeRepository
 import java.time.Duration
+import java.util.*
 
 @KafkaClient
 interface KafkaPublisher {
@@ -30,13 +31,15 @@ class OrderPublisher(
     lateinit var generateOrderDelay: String
 
     @EventListener
-    fun createOrder(event: StartupEvent) =
+    fun createOrder(event: StartupEvent?): Recipe? =
         generateSequence(0) { it }.toFlux()
-            .delayElements(Duration.parse(generateOrderDelay))
-            .log("create random order")
-            .map { recipeRepository.random() }
-            .log("send random order")
-            .flatMap { it }
-            .flatMap { kafkaPublisher.publishOrderCreateEvent(it) }
-            .blockLast()
+//            .delayElements(Duration.parse(generateOrderDelay))
+                .delayElements(Duration.ofSeconds(10))
+                .log("create random order")
+                .map { recipeRepository.random() }
+                .flatMap { it }
+                .filter(Objects::nonNull)
+                .log("send random order")
+                .flatMap { kafkaPublisher.publishOrderCreateEvent(it) }
+                .blockLast()
 }
